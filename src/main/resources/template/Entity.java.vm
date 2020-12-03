@@ -1,0 +1,44 @@
+package ${package}.${moduleName}.entity;
+
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
+#if(${hasBigDecimal})
+import java.math.BigDecimal;
+#end
+import java.io.Serializable;
+import java.util.Date;
+import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+@Data
+@TableName("${tableName}")
+public class ${className}Entity implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+#foreach ($column in $columns)
+	/**
+	 * $column.comments
+	 */
+	#if($column.columnName == $pk.columnName)
+@TableId
+	#end
+	#if($column.length != "0")
+@Size(min = 0, max = $column.length, message = "$column.comments 长度不能超过 $column.length 个字符 ")
+	#end
+	#if($column.flagNull == "0")
+@NotBlank(message = "$column.comments 不能为空")
+	#end
+private $column.attrType $column.attrname;
+#end
+
+}
